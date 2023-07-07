@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test thread-count="5" name="casualdetails">
+	 <parameter name="URL" value="amazon.com"/>
+    <classes>
+      <class name="test"/>
+      <class name="test3"/>
+    </classes>
+  </test> 
+  
+  <test thread-count="5" name="loandetails">
+	  <parameter name="URL" value="loan.com"/>
+	  <groups>
+		  <run>
+			  <include name="smoke"/>
+		  </run>
+	  </groups>
+    <classes>
+      <class name="test2">
+		  <methods>
+			  <exclude name="demo4"/>
+			  <exclude name="misc.*"/>
+			  
+		  </methods>
+		  </class>
+    </classes>
+  </test> 
+</suite> 

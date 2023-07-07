@@ -1,0 +1,36 @@
+package Slenium2;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class Locators_parent_sibling {
+	
+public static void main(String args[]) {
+		
+		ChromeOptions options = new ChromeOptions();
+
+		options.addArguments("--remote-allow-origins=*");
+
+		WebDriver driver = new ChromeDriver(options);
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		driver.get("https://magento.softwaretestingboard.com/");
+		driver.findElement(By.linkText("Sign In")).click();
+		driver.findElement(By.cssSelector("input[type='email']:nth-child(1)")).sendKeys("nirupa.thota@gmail.com");
+		driver.findElement(By.xpath("(//input[@class='input-text'])[3]")).sendKeys("Password2luma");
+		driver.findElement(By.xpath("//fieldset/div/div/button/span")).click();//click login btn.
+		System.out.println("Hi");
+		driver.findElement(By.cssSelector("button[data-action='customer-menu-toggle']")).click();//click arrow
+		//Path of Logout using parent to child(My account) and then to sibling traverse. 
+		driver.findElement(By.xpath("//div/ul/li/div/ul/li[1]/following-sibling::li[2]")).click();
+		driver.close();
+		
+		//div/ul/li/div/ul/li[1]/following-sibling::li[2]
+		
+		
+
+}}

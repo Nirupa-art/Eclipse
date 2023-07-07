@@ -1,0 +1,48 @@
+package files;
+
+import io.restassured.RestAssured;
+import io.restassured.filter.session.SessionFilter;
+
+import static io.restassured.RestAssured.*;
+
+import java.io.File;
+
+public class JiraTest5 {
+	
+	
+	
+	public static void main(String[] args) {
+		RestAssured.baseURI="http://localhost:8080";
+		
+		//create session
+		SessionFilter session1=new SessionFilter();
+		String response=given().header("Content-type", "application/json").body("{ \"username\": \"nirupa\", \r\n"
+				+ "\"password\": \"1234\" }").log().all().filter(session1).when().post("/rest/auth/1/session")
+		.then().log().all().extract().response().asString();
+		
+		
+		//update comment - issue created through postman and got the id for using here
+		given().pathParam("key","10107").header("Content-type", "application/json").body("{\r\n"
+				+ "    \"body\": \"Added comment through RESTAPI again may 24 2023\",\r\n"
+				+ "    \"visibility\": {\r\n"
+				+ "        \"type\": \"role\",\r\n"
+				+ "        \"value\": \"Administrators\"\r\n"
+				+ "    }\r\n"
+				+ "}").filter(session1).when().post("/rest/api/2/issue/{key}/comment")
+		.then().log().all().assertThat().statusCode(201);
+		
+		//Add attachment
+		given().pathParam("key","10107").header("X-Atlassian-Token", "no-check").header("Content-type","multipart/form-data")
+		.filter(session1)
+		.multiPart("file",new File("jira.txt"))
+		.when().post("/rest/api/2/issue/{key}/attachments").then().log().all().assertThat().statusCode(200);
+		
+		
+		//Get issue
+		given().filter(session1).pathParam("key","10107").log().all()
+		.when().get("/rest/api/2/issue/{Key}")
+		.then().log().all().extract().response().asString();
+		
+	}
+
+}

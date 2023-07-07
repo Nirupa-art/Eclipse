@@ -1,0 +1,56 @@
+package Satya;
+
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class StandAloneTest {
+	
+	
+	public static void main(String[] args) throws InterruptedException {
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--remote-allow-origins=*");
+		WebDriver driver = new ChromeDriver(options);
+		
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		
+		driver.get("https://magento.softwaretestingboard.com/");
+		driver.manage().window().maximize();
+		driver.findElement(By.linkText("Sign In")).click();
+		driver.findElement(By.cssSelector("input[type='email']:nth-child(1)")).sendKeys("nirupa.thota@gmail.com");
+		driver.findElement(By.xpath("(//input[@class='input-text'])[3]")).sendKeys("Password2luma");
+		driver.findElement(By.xpath("//fieldset/div/div/button/span")).click();
+		Actions action = new Actions(driver);
+		action.moveToElement(driver.findElement(By.xpath("//div/nav/ul/li[4]/a/span[1]")));//mve to the  arrow
+		action.perform();
+		driver.findElement(By.xpath("(//div/nav/ul/li[4]/ul/li/a/span)[2]")).click();//click fitness equipment
+		List<WebElement> items=driver.findElements(By.cssSelector(".product-item"));// take the items in to list
+		System.out.println("here");
+		//select the product with name Sprite foam roller , based on the name matching found in tag a.
+		
+		WebElement prod=items.stream().filter(pr->pr.findElement(By.cssSelector(".product-item-link")).getText().equals("Sprite Foam Roller")).findFirst().orElse(null);
+		Thread.sleep(5000);
+		System.out.println("before");
+		//prod.click();
+		System.out.println("After");
+		action.moveToElement(prod);
+		action.perform();
+		Thread.sleep(5000);
+		WebElement addcart=prod.findElement(By.xpath("//div/div/div[3]/div/div/form/button"));
+		action.moveToElement(addcart);
+		action.perform();
+		Thread.sleep(5000);
+		addcart.click();
+		
+		
+	}
+
+}

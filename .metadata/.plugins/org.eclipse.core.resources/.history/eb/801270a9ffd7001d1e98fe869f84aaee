@@ -1,0 +1,45 @@
+package Slenium2;
+
+import java.awt.Desktop.Action;
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ISelect;
+import org.openqa.selenium.support.ui.Select;
+
+public class Select_dropdowns {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--remote-allow-origins=*");
+		WebDriver driver = new ChromeDriver(options);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		driver.manage().window().maximize();
+		
+		driver.get("https://magento.softwaretestingboard.com/");
+		driver.findElement(By.linkText("Sign In")).click();
+		driver.findElement(By.cssSelector("input[type='email']:nth-child(1)")).sendKeys("nirupa.thota@gmail.com");
+		driver.findElement(By.xpath("(//input[@class='input-text'])[3]")).sendKeys("Password2luma");
+		driver.findElement(By.xpath("//fieldset/div/div/button/span")).click();
+		//xpath for arrow beside women
+		WebElement women = driver.findElement(By.xpath("(//span[@class='ui-menu-icon ui-icon ui-icon-carat-1-e'])[1]"));
+		Actions action = new Actions(driver);
+		action.moveToElement(women).perform();
+		driver.findElement(By.xpath("//a[@class='ui-corner-all']/span")).click();
+		Select dd=new Select(driver.findElement(By.className("sorter-options")));
+		dd.selectByIndex(0);
+		dd.selectByValue("product Name");
+		dd.selectByVisibleText("Price");
+		
+		
+
+	}
+
+}
